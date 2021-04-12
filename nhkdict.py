@@ -1,3 +1,4 @@
+import sqlite3
 import xml.etree.ElementTree as ET
 from copy import copy
 from dataclasses import dataclass
@@ -43,3 +44,13 @@ class NHKDict:
         for item in self.find_items(query):
             results.append(NHKResult.from_xml_element(item))
         return results
+
+
+class NHKAudio:
+    def __init__(self, uri):
+        self.db = sqlite3.connect(uri, uri=True)
+        self.cursor = self.db.cursor()
+
+    def get(self, name):
+        self.cursor.execute("SELECT Data FROM Resource WHERE Name = ?", [name])
+        return self.cursor.fetchone()[0]

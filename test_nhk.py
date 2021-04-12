@@ -1,6 +1,6 @@
 import pytest
 
-from nhkdict import NHKDict
+from nhkdict import NHKDict, NHKAudio
 
 
 class TestNHKDict:
@@ -27,3 +27,17 @@ class TestNHKDict:
         actual_titles = {result.title for result in results}
         assert len(results) == 4
         assert actual_titles == expected_titles
+
+
+class TestNHKAudio:
+    @classmethod
+    def setup_class(cls):
+        cls.snd = NHKAudio('file:data/Accent-snd.db?mode=ro')
+
+    @pytest.mark.parametrize('name,size', [
+        ('J00003', 4401),
+        ('K90542', 11107),
+    ])
+    def test_get(self, name, size):
+        file = self.snd.get(name)
+        assert len(file) == size, file
