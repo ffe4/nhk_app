@@ -1,12 +1,14 @@
 import re
+from io import BytesIO
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, abort, send_file
 
-from nhkdict import NHKDict
+from nhkdict import NHKDict, NHKAudio
 
 app = Flask(__name__)
 
 nhk = NHKDict("data/nhk_dict.xml")
+snd = NHKAudio("file:data/Accent-snd.db?mode=ro")
 
 
 @app.route("/", methods=["GET"])
@@ -26,6 +28,17 @@ def make_results(results):
     )
     html = re.sub(pattern, lambda x: chr(int(x.group("unicode"), 16)), html)
     return html
+
+
+@app.route("/snd/<name>", methods=["GET"])
+def audio(name):
+    file = snd.get(name)
+    if not file:
+        abort(404)
+    return send_file(
+        BytesIO(file),
+        mimetype='audio/mp3',
+    )
 
 
 if __name__ == "__main__":
