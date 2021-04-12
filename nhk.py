@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from copy import copy
 from dataclasses import dataclass
 
 
@@ -13,10 +14,10 @@ class NHKResult:
     def from_xml_element(cls, element):
         title = element.find("title").text
         summary = element.find("summary").text
-        head_element = element.find("head")
+        head_element = copy(element.find("head"))
         head_element.tag = "div"
         head = "".join([ET.tostring(e, encoding="unicode") for e in list(head_element)])
-        body_element = element.find("body")
+        body_element = copy(element.find("body"))
         body_element.tag = "div"
         body = "".join([ET.tostring(e, encoding="unicode") for e in list(body_element)])
         return cls(title, summary, head, body)
