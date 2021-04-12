@@ -23,10 +23,14 @@ def index():
 def make_results(results):
     html = "\n".join([item.head + item.body for item in results])
     html = html.replace("NetDicResID:Accent-gi:speaker::", "/static/speaker.png")
-    pattern = re.compile(
+    speaker_icon = re.compile(
         r'<img src="NetDicResID:Accent-ugi:(?P<unicode>[1234567890ABCDEF]*?):" style="height:1em;vertical-align:middle;border:none;" alt="�" data-txt-len="1" />'
     )
-    html = re.sub(pattern, lambda x: chr(int(x.group("unicode"), 16)), html)
+    html = re.sub(speaker_icon, lambda x: chr(int(x.group("unicode"), 16)), html)
+    audio_link = re.compile(
+        r'<a class="NetDicAudioLink" href="NetDicResID:Accent-snd:(?P<filename>\w*?):">'
+    )
+    html = re.sub(audio_link, lambda x: f'<audio controls src="snd/{x.group("filename")}"></audio>', html)
     return html
 
 
