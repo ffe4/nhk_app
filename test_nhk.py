@@ -41,3 +41,7 @@ class TestNHKAudio:
     def test_get(self, name, size):
         file = self.snd.get(name)
         assert len(file) == size, file
+
+    def test_get_returns_none_if_no_match(self):
+        result = self.snd.get('no-match')
+        assert result is None
