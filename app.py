@@ -2,11 +2,11 @@ import re
 
 from flask import Flask, render_template, request
 
-from nhk import NHK
+from nhkdict import NHKDict
 
 app = Flask(__name__)
 
-nhk = NHK("data/nhk_dict.xml")
+nhk = NHKDict("data/nhk_dict.xml")
 
 
 @app.route("/", methods=["GET"])

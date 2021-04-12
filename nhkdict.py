@@ -23,7 +23,7 @@ class NHKResult:
         return cls(title, summary, head, body)
 
 
-class NHK:
+class NHKDict:
     def __init__(self, xml_path):
         self.tree = ET.parse(xml_path)
         self.root = self.tree.getroot()
