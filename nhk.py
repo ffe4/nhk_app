@@ -42,7 +42,3 @@ class NHK:
         for item in self.find_items(query):
             results.append(NHKResult.from_xml_element(item))
         return results
-
-
-def lookup(query):
-    return f"result for {query}"
